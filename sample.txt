@@ -1,0 +1,1 @@
+This is a sample document. It contains information that the RAG system will use to answer questions. The capital of France is Paris.
