@@ -1,6 +1,4 @@
 # This block defines the managed PostgreSQL database.
-# For the free plan, you only need to provide a name.
-# Render automatically provisions a PostgreSQL instance.
 databases:
   - name: db
     plan: free
@@ -28,9 +26,7 @@ services:
     env: docker
     dockerfilePath: ./frontend.Dockerfile
     envVars:
-      # This links the frontend to the backend service.
+      # Set the backend URL using Render's internal service discovery.
+      # The service name 'backend' is automatically resolved to the internal IP.
       - key: BACKEND_URL
-        fromService:
-          type: web
-          name: backend
-          property: url
+        value: http://backend:8000
