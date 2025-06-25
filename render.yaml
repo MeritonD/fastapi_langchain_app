@@ -1,16 +1,15 @@
 # This block defines the managed PostgreSQL database.
-# It is separate from the 'services' block.
 databases:
   - name: db
-    plan: free # Use Render's free tier for the database
-    postgres:
-      version: 16
+    engine: postgres # Specifies the database type
+    version: "16"      # Specifies the version directly
+    plan: free         # Uses Render's free tier for the database
 
 # This block defines the web services (your containers).
 services:
   - type: web
     name: backend
-    plan: free # Use Render's free tier for the web service
+    plan: free # Uses Render's free tier for the web service
     env: docker
     dockerfilePath: ./backend.Dockerfile
     envVars:
@@ -25,7 +24,7 @@ services:
 
   - type: web
     name: frontend
-    plan: free # Use Render's free tier for the web service
+    plan: free # Uses Render's free tier for the web service
     env: docker
     dockerfilePath: ./frontend.Dockerfile
     envVars:
