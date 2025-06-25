@@ -1,32 +1,31 @@
-services:
-  # Defines a native Render PostgreSQL instance.
-  - type: postgres
-    name: db
+# This block defines the managed PostgreSQL database.
+# It is separate from the 'services' block.
+databases:
+  - name: db
+    plan: free # Use Render's free tier for the database
     postgres:
       version: 16
-    disk:
-      name: pg_data
-      sizeGB: 1
 
-  # Defines the backend web service, built from a Dockerfile.
+# This block defines the web services (your containers).
+services:
   - type: web
     name: backend
+    plan: free # Use Render's free tier for the web service
     env: docker
     dockerfilePath: ./backend.Dockerfile
     envVars:
-      # This correctly links the backend to the PostgreSQL service created above.
+      # This correctly links the backend to the database created above.
       - key: DATABASE_URL
-        fromService:
-          type: postgres
+        fromDatabase:
           name: db
           property: connectionString
       # You will still need to add this secret key in the Render dashboard.
       - key: GEMINI_API_KEY
         sync: false
 
-  # Defines the frontend web service, built from a Dockerfile.
   - type: web
     name: frontend
+    plan: free # Use Render's free tier for the web service
     env: docker
     dockerfilePath: ./frontend.Dockerfile
     envVars:
