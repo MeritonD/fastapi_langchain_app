@@ -14,7 +14,7 @@ def initialize_rag_chain():
     global qa
     if qa is None:
         try:
-            knowledge_base_path = "/home/meriton/codingprojects/fastapi_rag_project/knowledge_base.txt"
+            knowledge_base_path = "knowledge_base.txt"
             if not os.path.exists(knowledge_base_path):
                 print("Knowledge base not found, scraping Wikipedia articles...")
                 get_wikipedia_articles(topics_to_fetch, knowledge_base_path)
