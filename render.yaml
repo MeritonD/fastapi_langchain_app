@@ -1,34 +1,34 @@
 # This block defines the managed PostgreSQL database.
+# For the free plan, you only need to provide a name.
+# Render automatically provisions a PostgreSQL instance.
 databases:
   - name: db
-    engine: postgres # Specifies the database type
-    version: "16"      # Specifies the version directly
-    plan: free         # Uses Render's free tier for the database
+    plan: free
 
-# This block defines the web services (your containers).
+# This block defines your web services.
 services:
   - type: web
     name: backend
-    plan: free # Uses Render's free tier for the web service
+    plan: free
     env: docker
     dockerfilePath: ./backend.Dockerfile
     envVars:
-      # This correctly links the backend to the database created above.
+      # This links the backend to the database defined above.
       - key: DATABASE_URL
         fromDatabase:
           name: db
           property: connectionString
-      # You will still need to add this secret key in the Render dashboard.
+      # You must add this secret in the Render dashboard.
       - key: GEMINI_API_KEY
         sync: false
 
   - type: web
     name: frontend
-    plan: free # Uses Render's free tier for the web service
+    plan: free
     env: docker
     dockerfilePath: ./frontend.Dockerfile
     envVars:
-      # This correctly links the frontend to the backend service.
+      # This links the frontend to the backend service.
       - key: BACKEND_URL
         fromService:
           type: web
