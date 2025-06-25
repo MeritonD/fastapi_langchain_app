@@ -1,32 +1,36 @@
 services:
-  - type: pserv
+  # Defines a native Render PostgreSQL instance.
+  - type: postgres
     name: db
-    env: postgres
     postgres:
       version: 16
     disk:
       name: pg_data
-      mountPath: /var/lib/postgresql/data
       sizeGB: 1
 
+  # Defines the backend web service, built from a Dockerfile.
   - type: web
     name: backend
     env: docker
     dockerfilePath: ./backend.Dockerfile
     envVars:
+      # This correctly links the backend to the PostgreSQL service created above.
       - key: DATABASE_URL
         fromService:
-          type: pserv
+          type: postgres
           name: db
           property: connectionString
+      # You will still need to add this secret key in the Render dashboard.
       - key: GEMINI_API_KEY
         sync: false
 
+  # Defines the frontend web service, built from a Dockerfile.
   - type: web
     name: frontend
     env: docker
     dockerfilePath: ./frontend.Dockerfile
     envVars:
+      # This correctly links the frontend to the backend service.
       - key: BACKEND_URL
         fromService:
           type: web
